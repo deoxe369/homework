@@ -1,7 +1,9 @@
 package com.wongnai.interview.movie.search;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,27 @@ public class SimpleMovieSearchService implements MovieSearchService {
 		//TODO: Step 2 => Implement this method by using data from MovieDataService
 		// All test in SimpleMovieSearchServiceIntegrationTest must pass.
 		// Please do not change @Component annotation on this class
-		return null;
+
+		List<Movie> movieList = movieDataService.fetchAll().stream()
+				.filter(m -> nameContain(m.getTitle(), queryText))
+				.map(m -> {
+					Movie movie = new Movie(m.getTitle());
+					movie.setActors(m.getCast());
+					return movie;
+				}).collect(Collectors.toList());
+
+		return movieList;
+	}
+
+	private boolean nameContain(String title, String queryText) {
+
+		if (StringUtils.containsIgnoreCase(title, queryText)) {
+			for (String word : title.split(" ")) {
+				if (StringUtils.equalsIgnoreCase(word, queryText)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
