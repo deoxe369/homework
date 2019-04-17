@@ -3,6 +3,7 @@ package com.wongnai.interview.movie;
 import java.util.Arrays;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MoviesControllerIntegrationTest {
 	@Autowired
 	private MockMvc mvc;
+
+	@Autowired
+	private InvertedIndexRepository invertedIndexRepository;
+
+	@Autowired
+	private MovieRepository movieRepository;
+
+	@After
+	public void teardown() {
+		invertedIndexRepository.deleteAll();
+		movieRepository.deleteAll();
+	}
+
 
 	@Test
 	public void testSearchWithRestApi() throws Exception {

@@ -1,6 +1,7 @@
 package com.wongnai.interview.movie;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,7 +25,7 @@ public class MoviesController {
 	 * </pre>
 	 */
 	@Autowired
-	@Qualifier("databaseMovieSearchService")
+	@Qualifier("invertedIndexMovieSearchService")
 	private MovieSearchService movieSearchService;
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -33,7 +34,7 @@ public class MoviesController {
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public List<Movie> searchTitleWithKeyword(@RequestParam("q") String keyword) {
+	public List<Movie> searchTitleWithKeyword(@RequestParam("q") String keyword) throws ExecutionException, InterruptedException {
 		return movieSearchService.search(keyword);
 	}
 }

@@ -1,6 +1,7 @@
 package com.wongnai.interview.movie.search;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -20,14 +21,14 @@ public class InvertedIndexMovieSearchServiceIntegrationTest {
 	private InvertedIndexMovieSearchService searchService;
 
 	@Test
-	public void testFindSingleKeywordContainInTitle() {
+	public void testFindSingleKeywordContainInTitle() throws ExecutionException, InterruptedException {
 		List<Movie> result = searchService.search("Glorious");
 
 		assertGloriousMovieKeyword(result);
 	}
 
 	@Test
-	public void testFindSingleKeywordContainInTitleWithCaseInsensitive() {
+	public void testFindSingleKeywordContainInTitleWithCaseInsensitive() throws ExecutionException, InterruptedException {
 		List<Movie> result = searchService.search("glorious");
 
 		assertGloriousMovieKeyword(result);
@@ -46,14 +47,14 @@ public class InvertedIndexMovieSearchServiceIntegrationTest {
 	}
 
 	@Test
-	public void testPartialWordMustNotMatch() {
+	public void testPartialWordMustNotMatch() throws ExecutionException, InterruptedException {
 		List<Movie> result = searchService.search("Glorio");
 
 		Assert.assertThat(result.size(), Matchers.equalTo(0));
 	}
 
 	@Test
-	public void testFullMovieNameMustMatchMovie() {
+	public void testFullMovieNameMustMatchMovie() throws ExecutionException, InterruptedException {
 		List<Movie> result = searchService.search("The Glorious Lady");
 
 		Assert.assertThat(result.size(), Matchers.equalTo(1));
@@ -61,7 +62,7 @@ public class InvertedIndexMovieSearchServiceIntegrationTest {
 	}
 
 	@Test
-	public void testMultiKeywordsMustFoundMoviesContainAllOfKeywords() {
+	public void testMultiKeywordsMustFoundMoviesContainAllOfKeywords() throws ExecutionException, InterruptedException {
 		List<Movie> result = searchService.search("Glorious One");
 
 		Assert.assertThat(result.size(), Matchers.equalTo(2));
@@ -70,7 +71,7 @@ public class InvertedIndexMovieSearchServiceIntegrationTest {
 	}
 
 	@Test
-	public void testMultiKeywordsCaseInsensitive() {
+	public void testMultiKeywordsCaseInsensitive() throws ExecutionException, InterruptedException {
 		List<Movie> result = searchService.search("gLoRiOuS OnE");
 
 		Assert.assertThat(result.size(), Matchers.equalTo(2));
